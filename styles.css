@@ -1,0 +1,9 @@
+body {
+   margin: 0px;
+   padding: 5px;
+   background-color: #000;
+}
+
+.board {
+   position: relative;
+}

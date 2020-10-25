@@ -1,8 +1,10 @@
-const BoardDOM = require('./dom/BoardDOM');
-const TileElement = require('./dom/TileElement');
+const Board = require('./models/board');
+const BoardDOM = require('./dom/boardDOM');
+const BoardController = require("./controllers/boardController");
 
 document.addEventListener('DOMContentLoaded',() => {
+   const board = new Board(15, 8);
    const dom = new BoardDOM(document);
-   const tile = new TileElement("grassland1", 0, 0);
-   dom.addTile(tile);
+   const controller = new BoardController(board, dom);
+   controller.renderBoard();
 });
