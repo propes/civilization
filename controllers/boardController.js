@@ -20,9 +20,13 @@ module.exports = class BoardController {
    }
 
    renderUnits() {
-      this.board.units.forEach(unit => {
-         const elem = new UnitElement(unit);
+      for (let key in this.board.units) {
+         const elem = new UnitElement(this.board.units[key]);
          this.dom.addUnit(elem);
-      });
+      }
+   }
+
+   moveSelectedUnitDown() {
+      this.board.moveSelectedUnitDown();
    }
 }

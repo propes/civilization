@@ -3,6 +3,8 @@ module.exports = class UnitElement {
    TILE_HEIGHT = 32;
    TOP_OFFSET = 24;
 
+   cssTemplate = 'position: absolute; top: {top}px; left: {left}px';
+
    constructor(unit) {
       this.id = unit.id;
       this.type = unit.type;
@@ -14,7 +16,7 @@ module.exports = class UnitElement {
       const elem = document.createElement('img');
       elem.id = this.id;
       elem.src = `./images/units/${this.type}.gif`;
-      elem.style = `position: absolute; top: ${this.top}px; left: ${this.left}px`;
+      elem.style = this.css;
       return elem;
    }
 
@@ -28,5 +30,18 @@ module.exports = class UnitElement {
       }
 
       return this.col * this.TILE_WIDTH + this.TILE_WIDTH / 2;
+   }
+
+   get css() {
+      return this.cssTemplate
+         .replace('{top}', this.top)
+         .replace('{left}', this.left);
+   }
+
+   moveToLocation(row, col) {
+      this.row = row;
+      this.col = col;
+      const elem = document.getElementById(this.id);
+      elem.style = this.css;
    }
 }

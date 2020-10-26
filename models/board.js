@@ -1,20 +1,28 @@
+const events = require('../events/eventBus');
+
 module.exports = class Board {
    tiles = [];
-   units = [
-      {
-         id: '43cc0b72-3339-43ba-bb27-ea08221db09c',
-         player: 'c5ac5491-e6c9-4dee-bbcb-4bae2408ac8e',
-         civ: 'French',
+   units = {
+      ['fr-settler-1']: {
+         id: 'fr-settler-1',
+         player: 'french',
+         civ: 'french',
          type: 'settler',
          row: 2,
          col: 2
       }
-   ];
+   };
+   selectedUnitId = 'fr-settler-1';
 
-   constructor(rowCount, colCount) {
+   constructor(rowCount, colCount, events) {
       this.rowCount = rowCount;
       this.colCount = colCount;
+
       this.generateTiles();
+   }
+
+   get selectedUnit() {
+      return this.units[this.selectedUnitId];
    }
 
    generateTiles() {
@@ -24,5 +32,17 @@ module.exports = class Board {
             this.tiles.push({ type: 'grassland1', row, col });
          }
       }
+   }
+
+   moveSelectedUnitDown() {
+      var unit = this.selectedUnit;
+      unit.row += 2;
+      events.publish({
+         name: 'unitMoved',
+         data: {
+            id: this.selectedUnitId,
+            newLocation: { row: unit.row, col: unit.col }
+         }
+      });
    }
 }

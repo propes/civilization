@@ -1,7 +1,11 @@
+const events = require('../events/eventBus');
+
 module.exports = class BoardDOM {
-   constructor(document) {
-      this.document = document;
+   units = {};
+
+   constructor() {
       this.elem = document.getElementById('board');
+      events.subscribe(this);
    }
 
    addTile(tile) {
@@ -10,7 +14,20 @@ module.exports = class BoardDOM {
    }
 
    addUnit(unit) {
+      this.units[unit.id] = unit;
       const unitElem = unit.createElement();
       this.elem.appendChild(unitElem);
+   }
+
+   moveUnit(e) {
+      const unit = this.units[e.id];
+      unit.moveToLocation(e.newLocation.row, e.newLocation.col);
+   }
+
+   onEvent(e) {
+      switch(e.name) {
+         case 'unitMoved':
+            this.moveUnit(e.data);
+      }
    }
 }
