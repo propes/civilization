@@ -8,10 +8,4 @@ document.addEventListener('DOMContentLoaded',() => {
    const controller = new BoardController(board, dom);
 
    controller.renderBoard();
-
-   document.addEventListener("keydown", e => {
-      if (e.key === "ArrowDown") {
-         controller.moveSelectedUnitDown();
-      }
-   });
 });

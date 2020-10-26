@@ -34,13 +34,31 @@ module.exports = class Board {
       }
    }
 
+   moveSelectedUnitUp() {
+      this.selectedUnit.row -= 2;
+      this.publishUnitMovedEvent(this.selectedUnit);
+   }
+
    moveSelectedUnitDown() {
-      var unit = this.selectedUnit;
-      unit.row += 2;
+      this.selectedUnit.row += 2;
+      this.publishUnitMovedEvent(this.selectedUnit);
+   }
+
+   moveSelectedUnitLeft() {
+      this.selectedUnit.col--;
+      this.publishUnitMovedEvent(this.selectedUnit);
+   }
+
+   moveSelectedUnitRight() {
+      this.selectedUnit.col++;
+      this.publishUnitMovedEvent(this.selectedUnit);
+   }
+
+   publishUnitMovedEvent(unit) {
       events.publish({
          name: 'unitMoved',
          data: {
-            id: this.selectedUnitId,
+            id: unit.id,
             newLocation: { row: unit.row, col: unit.col }
          }
       });
