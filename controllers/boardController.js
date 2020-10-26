@@ -1,4 +1,5 @@
 const TileElement = require('../dom/tileElement');
+const UnitElement = require('../dom/unitElement');
 
 module.exports = class BoardController {
    constructor(board, dom) {
@@ -7,9 +8,21 @@ module.exports = class BoardController {
    }
 
    renderBoard() {
+      this.renderTiles();
+      this.renderUnits();
+   }
+
+   renderTiles() {
       this.board.tiles.forEach(tile => {
-         const tileElem = new TileElement(tile.type, tile.row, tile.col);
-         this.dom.addTile(tileElem);
+         const elem = new TileElement(tile);
+         this.dom.addTile(elem);
+      });
+   }
+
+   renderUnits() {
+      this.board.units.forEach(unit => {
+         const elem = new UnitElement(unit);
+         this.dom.addUnit(elem);
       });
    }
 }

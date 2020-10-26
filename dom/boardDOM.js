@@ -5,7 +5,12 @@ module.exports = class BoardDOM {
    }
 
    addTile(tile) {
-      const tileElem = tile.create(this.document);
+      const tileElem = tile.createElement();
       this.elem.appendChild(tileElem);
+   }
+
+   addUnit(unit) {
+      const unitElem = unit.createElement();
+      this.elem.appendChild(unitElem);
    }
 }

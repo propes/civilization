@@ -2,13 +2,13 @@ module.exports = class TileElement {
    TILE_WIDTH = 64;
    TILE_HEIGHT = 32;
 
-   constructor(terrainType, row, col) {
-      this.terrainType = terrainType;
-      this.row = row;
-      this.col = col;
+   constructor(tile) {
+      this.terrainType = tile.type;
+      this.row = tile.row;
+      this.col = tile.col;
    }
 
-   create(document) {
+   createElement() {
       const tileElem = document.createElement('img');
       tileElem.src = `./images/terrain/${this.terrainType}.gif`;
       tileElem.style = `position: absolute; top: ${this.top}px; left: ${this.left}px`;
