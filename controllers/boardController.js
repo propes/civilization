@@ -30,16 +30,17 @@ module.exports = class BoardController {
    }
 
    renderTiles() {
-      this.board.tiles.forEach(tile => {
+      this.board.getTiles().forEach(tile => {
          const elem = new TileElement(tile);
          this.dom.addTile(elem);
       });
    }
 
    renderUnits() {
-      for (let key in this.board.units) {
-         const elem = new UnitElement(this.board.units[key]);
+      const units = this.board.getUnits();
+      Object.values(units).forEach(unit => {
+         const elem = new UnitElement(unit);
          this.dom.addUnit(elem);
-      }
+      })
    }
 }

@@ -1,8 +1,10 @@
 const events = require('../events/eventBus');
 
-module.exports = class Board {
-   tiles = [];
-   units = {
+function Board(rowCount, colCount) {
+   const _rowCount = rowCount;
+   const _colCount = colCount;
+   const _tiles = [];
+   const _units = {
       ['fr-settler-1']: {
          id: 'fr-settler-1',
          player: 'french',
@@ -12,49 +14,50 @@ module.exports = class Board {
          col: 2
       }
    };
-   selectedUnitId = 'fr-settler-1';
+   const _selectedUnitId = 'fr-settler-1';
 
-   constructor(rowCount, colCount, events) {
-      this.rowCount = rowCount;
-      this.colCount = colCount;
+   generateTiles();
 
-      this.generateTiles();
-   }
+   this.getTiles = () => _tiles;
 
-   get selectedUnit() {
-      return this.units[this.selectedUnitId];
-   }
+   this.getUnits = () => _units;
 
-   generateTiles() {
-      for (let row = 0; row < this.rowCount; row++) {
-         for (let col = 0; col < this.colCount; col++) {
-            if (row % 2 > 0 && col === this.colCount - 1) continue;
-            this.tiles.push({ type: 'grassland1', row, col });
+   this.getSelectedUnit = () => _units[_selectedUnitId];
+
+   function generateTiles() {
+      for (let row = 0; row < _rowCount; row++) {
+         for (let col = 0; col < _colCount; col++) {
+            if (row % 2 > 0 && col === _colCount - 1) continue;
+            _tiles.push({ type: 'grassland1', row, col });
          }
       }
    }
 
-   moveSelectedUnitUp() {
-      this.selectedUnit.row -= 2;
-      this.publishUnitMovedEvent(this.selectedUnit);
-   }
+   this.moveSelectedUnitUp = function() {
+      const unit = this.getSelectedUnit();
+      unit.row -= 2;
+      this.publishUnitMovedEvent(unit);
+   };
 
-   moveSelectedUnitDown() {
-      this.selectedUnit.row += 2;
-      this.publishUnitMovedEvent(this.selectedUnit);
-   }
+   this.moveSelectedUnitDown = function() {
+      const unit = this.getSelectedUnit();
+      unit.row += 2;
+      this.publishUnitMovedEvent(unit);
+   };
 
-   moveSelectedUnitLeft() {
-      this.selectedUnit.col--;
-      this.publishUnitMovedEvent(this.selectedUnit);
-   }
+   this.moveSelectedUnitLeft = function() {
+      const unit = this.getSelectedUnit();
+      unit.col--;
+      this.publishUnitMovedEvent(unit);
+   };
 
-   moveSelectedUnitRight() {
-      this.selectedUnit.col++;
-      this.publishUnitMovedEvent(this.selectedUnit);
-   }
+   this.moveSelectedUnitRight = function() {
+      const unit = this.getSelectedUnit();
+      unit.col++;
+      this.publishUnitMovedEvent(unit);
+   };
 
-   publishUnitMovedEvent(unit) {
+   this.publishUnitMovedEvent = function(unit) {
       events.publish({
          name: 'unitMoved',
          data: {
@@ -62,5 +65,7 @@ module.exports = class Board {
             newLocation: { row: unit.row, col: unit.col }
          }
       });
-   }
+   };
 }
+
+module.exports = Board;
