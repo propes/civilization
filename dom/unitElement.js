@@ -1,10 +1,10 @@
+const TILE_WIDTH = 64;
+const TILE_HEIGHT = 32;
+const TOP_OFFSET = 24;
+
+const cssTemplate = 'position: absolute; top: {top}px; left: {left}px';
+
 module.exports = class UnitElement {
-   TILE_WIDTH = 64;
-   TILE_HEIGHT = 32;
-   TOP_OFFSET = 24;
-
-   cssTemplate = 'position: absolute; top: {top}px; left: {left}px';
-
    constructor(unit) {
       this.id = unit.id;
       this.type = unit.type;
@@ -21,19 +21,19 @@ module.exports = class UnitElement {
    }
 
    get top() {
-      return this.row * this.TILE_HEIGHT / 2 - this.TOP_OFFSET;
+      return this.row * TILE_HEIGHT / 2 - TOP_OFFSET;
    }
 
    get left() {
       if (this.row % 2 === 0) {
-         return this.col * this.TILE_WIDTH;
+         return this.col * TILE_WIDTH;
       }
 
-      return this.col * this.TILE_WIDTH + this.TILE_WIDTH / 2;
+      return this.col * TILE_WIDTH + TILE_WIDTH / 2;
    }
 
    get css() {
-      return this.cssTemplate
+      return cssTemplate
          .replace('{top}', this.top)
          .replace('{left}', this.left);
    }

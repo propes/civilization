@@ -1,7 +1,7 @@
-module.exports = class TileElement {
-   TILE_WIDTH = 64;
-   TILE_HEIGHT = 32;
+const TILE_WIDTH = 64;
+const TILE_HEIGHT = 32;
 
+module.exports = class TileElement {
    constructor(tile) {
       this.terrainType = tile.type;
       this.row = tile.row;
@@ -16,14 +16,14 @@ module.exports = class TileElement {
    }
 
    get top() {
-      return this.row * this.TILE_HEIGHT / 2;
+      return this.row * TILE_HEIGHT / 2;
    }
 
    get left() {
       if (this.row % 2 === 0) {
-         return this.col * this.TILE_WIDTH;
+         return this.col * TILE_WIDTH;
       }
 
-      return this.col * this.TILE_WIDTH + this.TILE_WIDTH / 2;
+      return this.col * TILE_WIDTH + TILE_WIDTH / 2;
    }
 }
