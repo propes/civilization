@@ -1,11 +1,11 @@
-module.exports = {
-   subscribers: [],
+module.exports = function EventBus() {
+   const subscribers = [];
 
-   subscribe(sub) {
-      this.subscribers.push(sub);
-   },
+   this.subscribe = function(sub) {
+      subscribers.push(sub);
+   };
 
-   publish(e) {
-      this.subscribers.forEach(sub => sub.onEvent(e));
-   }
+   this.publish = function(e) {
+      subscribers.forEach(sub => sub.onEvent(e));
+   };
 };

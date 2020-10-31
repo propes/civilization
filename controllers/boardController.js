@@ -1,27 +1,41 @@
-const TileElement = require('../dom/tileElement');
-const UnitElement = require('../dom/unitElement');
+const EventBus = require('../events/eventBus');
+const Board = require('../models/board');
+const BoardDOM = require('../dom/boardDOM');
 
 module.exports = class BoardController {
-   constructor(board, dom) {
-      this.board = board;
-      this.dom = dom;
+   constructor(boardElem, state) {
+      const events = new EventBus();
+      this.board = new Board(state, events);
+      this.dom = new BoardDOM(boardElem, events);
+   }
 
-      document.addEventListener("keydown", e => {
-         switch (e.key) {
-            case "ArrowUp":
-               this.board.moveSelectedUnitUp();
-               break;
-            case "ArrowDown":
-               this.board.moveSelectedUnitDown();
-               break;
-            case "ArrowLeft":
-               this.board.moveSelectedUnitLeft();
-               break;
-            case "ArrowRight":
-               this.board.moveSelectedUnitRight();
-               break;
-         }
-      });
+   onKeyDown(key) {
+      switch (key) {
+         case 'ArrowUp':
+            this.board.moveSelectedUnitUp();
+            break;
+         case 'ArrowDown':
+            this.board.moveSelectedUnitDown();
+            break;
+         case 'ArrowLeft':
+            this.board.moveSelectedUnitLeft();
+            break;
+         case 'ArrowRight':
+            this.board.moveSelectedUnitRight();
+            break;
+         case 'Home':
+            this.board.moveSelectedUnitUpAndLeft();
+            break;
+         case 'PageUp':
+            this.board.moveSelectedUnitUpAndRight();
+            break;
+         case 'End':
+            this.board.moveSelectedUnitDownAndLeft();
+            break;
+         case 'PageDown':
+            this.board.moveSelectedUnitDownAndRight();
+            break;
+      }
    }
 
    renderBoard() {
@@ -31,16 +45,14 @@ module.exports = class BoardController {
 
    renderTiles() {
       this.board.getTiles().forEach(tile => {
-         const elem = new TileElement(tile);
-         this.dom.addTile(elem);
+         this.dom.createTileElement(tile);
       });
    }
 
    renderUnits() {
       const units = this.board.getUnits();
       Object.values(units).forEach(unit => {
-         const elem = new UnitElement(unit);
-         this.dom.addUnit(elem);
+         this.dom.createUnitElement(unit);
       })
    }
 }

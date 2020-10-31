@@ -2,14 +2,13 @@ const UnitElement = require('./unitElement');
 
 describe('when creating an image', () => {
    const tileElem = new UnitElement({ type: 'settler', row: 0, col: 0});
-   const domElem = tileElem.createElement(document);
 
    test('creates an img element', () => {
-      expect(domElem.tagName).toBe('IMG');
+      expect(tileElem.elem.tagName).toBe('IMG');
    });
    
    test('with the expected image', () => {   
-      expect(domElem.src).toMatch(/settler/);
+      expect(tileElem.elem.src).toMatch(/settler/);
    });
 });
 

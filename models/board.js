@@ -1,61 +1,73 @@
-const events = require('../events/eventBus');
+module.exports = function Board(state, events) {
+   this.getTiles = () => state.tiles;
 
-function Board(rowCount, colCount) {
-   const _rowCount = rowCount;
-   const _colCount = colCount;
-   const _tiles = [];
-   const _units = {
-      ['fr-settler-1']: {
-         id: 'fr-settler-1',
-         player: 'french',
-         civ: 'french',
-         type: 'settler',
-         row: 2,
-         col: 2
-      }
-   };
-   const _selectedUnitId = 'fr-settler-1';
+   this.getUnits = () => state.units;
 
-   generateTiles();
-
-   this.getTiles = () => _tiles;
-
-   this.getUnits = () => _units;
-
-   this.getSelectedUnit = () => _units[_selectedUnitId];
-
-   function generateTiles() {
-      for (let row = 0; row < _rowCount; row++) {
-         for (let col = 0; col < _colCount; col++) {
-            if (row % 2 > 0 && col === _colCount - 1) continue;
-            _tiles.push({ type: 'grassland1', row, col });
-         }
-      }
-   }
+   this.getSelectedUnit = () => state.units[state.selectedUnitId];
 
    this.moveSelectedUnitUp = function() {
       const unit = this.getSelectedUnit();
-      unit.row -= 2;
+      if (unit.row > 1)
+         unit.row -= 2;
       this.publishUnitMovedEvent(unit);
    };
 
    this.moveSelectedUnitDown = function() {
       const unit = this.getSelectedUnit();
-      unit.row += 2;
+      if (unit.row < state.rowCount - 2)
+         unit.row += 2;
       this.publishUnitMovedEvent(unit);
    };
 
    this.moveSelectedUnitLeft = function() {
       const unit = this.getSelectedUnit();
-      unit.col--;
+      if (unit.col > 1)
+         unit.col -= 2;
       this.publishUnitMovedEvent(unit);
    };
 
    this.moveSelectedUnitRight = function() {
       const unit = this.getSelectedUnit();
-      unit.col++;
+      if (unit.col < state.colCount - 2)
+         unit.col += 2;
       this.publishUnitMovedEvent(unit);
    };
+
+   this.moveSelectedUnitUpAndLeft = function() {
+      const unit = this.getSelectedUnit();
+      if (unit.row > 0 && unit.col > 0) {
+         unit.row--;
+         unit.col--;
+      }
+      this.publishUnitMovedEvent(unit);
+   }
+
+   this.moveSelectedUnitUpAndRight = function() {
+      const unit = this.getSelectedUnit();
+      if (unit.row > 0 && unit.col < state.colCount - 1) {
+         unit.row--;
+         unit.col++;
+      }
+      this.publishUnitMovedEvent(unit);
+   }
+
+   this.moveSelectedUnitDownAndLeft = function() {
+      const unit = this.getSelectedUnit();
+      if (unit.row < state.rowCount - 1 && unit.col > 0) {
+         unit.row++;
+         unit.col--;
+      }
+      this.publishUnitMovedEvent(unit);
+   }
+
+   this.moveSelectedUnitDownAndRight = function() {
+      const unit = this.getSelectedUnit();
+      if (unit.row < state.rowCount - 1 && unit.col < state.colCount - 1) {
+         unit.row++;
+         unit.col++;
+      }
+      this.publishUnitMovedEvent(unit);
+   }
 
    this.publishUnitMovedEvent = function(unit) {
       events.publish({
@@ -67,5 +79,3 @@ function Board(rowCount, colCount) {
       });
    };
 }
-
-module.exports = Board;

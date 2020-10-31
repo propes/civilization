@@ -1,22 +1,31 @@
-const events = require('../events/eventBus');
+const TileElement = require('../dom/tileElement');
+const UnitElement = require('../dom/unitElement');
 
 module.exports = class BoardDOM {
    units = {};
 
-   constructor() {
-      this.elem = document.getElementById('board');
+   constructor(boardElem, events) {
+      this.boardElem = boardElem;
+      this.tilesElem = document.createElement('div');
+      this.tilesElem.id = 'tiles';
+      this.boardElem.appendChild(this.tilesElem);
+
+      this.unitsElem = document.createElement('div');
+      this.unitsElem.id = 'units';
+      this.boardElem.appendChild(this.unitsElem);
+
       events.subscribe(this);
    }
 
-   addTile(tile) {
-      const tileElem = tile.createElement();
-      this.elem.appendChild(tileElem);
+   createTileElement(tile) {
+      const tileElem = new TileElement(tile);
+      this.tilesElem.appendChild(tileElem.elem);
    }
 
-   addUnit(unit) {
-      this.units[unit.id] = unit;
-      const unitElem = unit.createElement();
-      this.elem.appendChild(unitElem);
+   createUnitElement(unit) {
+      const unitElem = new UnitElement(unit);
+      this.units[unit.id] = unitElem;
+      this.unitsElem.appendChild(unitElem.elem);
    }
 
    moveUnit(e) {

@@ -6,13 +6,13 @@ module.exports = class TileElement {
       this.terrainType = tile.type;
       this.row = tile.row;
       this.col = tile.col;
+      this.createElement();
    }
 
    createElement() {
-      const tileElem = document.createElement('img');
-      tileElem.src = `./images/terrain/${this.terrainType}.gif`;
-      tileElem.style = `position: absolute; top: ${this.top}px; left: ${this.left}px`;
-      return tileElem;
+      this.elem = document.createElement('img');
+      this.elem.src = `./images/terrain/${this.terrainType}.gif`;
+      this.elem.style = `position: absolute; top: ${this.top}px; left: ${this.left}px`;
    }
 
    get top() {
@@ -21,9 +21,9 @@ module.exports = class TileElement {
 
    get left() {
       if (this.row % 2 === 0) {
-         return this.col * TILE_WIDTH;
+         return this.col * TILE_WIDTH / 2;
       }
 
-      return this.col * TILE_WIDTH + TILE_WIDTH / 2;
+      return (this.col - 1) * TILE_WIDTH / 2 + TILE_WIDTH / 2;
    }
 }

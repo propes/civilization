@@ -10,14 +10,14 @@ module.exports = class UnitElement {
       this.type = unit.type;
       this.row = unit.row;
       this.col = unit.col;
+      this.createElement();
    }
 
    createElement() {
-      const elem = document.createElement('img');
-      elem.id = this.id;
-      elem.src = `./images/units/${this.type}.gif`;
-      elem.style = this.css;
-      return elem;
+      this.elem = document.createElement('img');
+      this.elem.id = this.id;
+      this.elem.src = `./images/units/${this.type}.gif`;
+      this.elem.style = this.css;
    }
 
    get top() {
@@ -25,11 +25,11 @@ module.exports = class UnitElement {
    }
 
    get left() {
-      if (this.row % 2 === 0) {
-         return this.col * TILE_WIDTH;
-      }
+      // if (this.row % 2 === 0) {
+         return this.col * TILE_WIDTH / 2;
+      // }
 
-      return this.col * TILE_WIDTH + TILE_WIDTH / 2;
+      // return this.col * TILE_WIDTH / 2 + TILE_WIDTH / 2;
    }
 
    get css() {
@@ -40,8 +40,7 @@ module.exports = class UnitElement {
 
    moveToLocation(row, col) {
       this.row = row;
-      this.col = col;
-      const elem = document.getElementById(this.id);
-      elem.style = this.css;
+      this.col = col;;
+      this.elem.style = this.css;
    }
 }
