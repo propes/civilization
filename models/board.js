@@ -69,6 +69,28 @@ module.exports = function Board(state, events) {
       this.publishUnitMovedEvent(unit);
    }
 
+   this.buildCity = function() {
+      const unit = this.getSelectedUnit();
+      const city = {
+         id: 'fr-city-1',
+         civ: unit.civ,
+         pop: 3,
+         row: unit.row,
+         col: unit.col
+      };
+      state.cities[city.id] = city;
+      unit.hasBuiltCity = true;
+      this.publishUnitKilledEvent(unit);
+      this.publishCityBuiltEvent(city);
+   }
+
+   this.publishCityBuiltEvent = function(city) {
+      events.publish({
+         name: 'cityBuilt',
+         city
+      });
+   }
+
    this.publishUnitMovedEvent = function(unit) {
       events.publish({
          name: 'unitMoved',
@@ -76,6 +98,13 @@ module.exports = function Board(state, events) {
             id: unit.id,
             newLocation: { row: unit.row, col: unit.col }
          }
+      });
+   };
+
+   this.publishUnitKilledEvent = function(unit) {
+      events.publish({
+         name: 'unitKilled',
+         unitId: unit.id
       });
    };
 }

@@ -35,6 +35,9 @@ module.exports = class BoardController {
          case 'PageDown':
             this.board.moveSelectedUnitDownAndRight();
             break;
+         case 'b':
+            this.board.buildCity();
+            break;
       }
    }
 

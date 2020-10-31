@@ -6,10 +6,10 @@ function createBoardState() {
       rowCount: rowCount,
       colCount: colCount,
       tiles: tiles,
+      cities: {},
       units: {
          ['fr-settler-1']: {
             id: 'fr-settler-1',
-            player: 'french',
             civ: 'french',
             type: 'settler',
             row: 4,

@@ -25,11 +25,7 @@ module.exports = class UnitElement {
    }
 
    get left() {
-      // if (this.row % 2 === 0) {
-         return this.col * TILE_WIDTH / 2;
-      // }
-
-      // return this.col * TILE_WIDTH / 2 + TILE_WIDTH / 2;
+      return this.col * TILE_WIDTH / 2;
    }
 
    get css() {

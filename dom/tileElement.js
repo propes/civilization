@@ -24,6 +24,6 @@ module.exports = class TileElement {
          return this.col * TILE_WIDTH / 2;
       }
 
-      return (this.col - 1) * TILE_WIDTH / 2 + TILE_WIDTH / 2;
+      return this.col * TILE_WIDTH / 2;
    }
 }
