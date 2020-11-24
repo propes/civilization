@@ -27,8 +27,13 @@ module.exports = class CityElement {
       title.classList.add('city-icon');
       title.style.color = '#FFF';
 
+      const popBadge = document.createElement('div');
+      popBadge.innerHTML = this.pop;
+      popBadge.classList.add('pop-badge');
+
       this.elem.appendChild(icon);
       this.elem.appendChild(title);
+      this.elem.appendChild(popBadge);
    }
 
    get top() {
