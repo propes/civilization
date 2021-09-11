@@ -5,6 +5,7 @@ const TOP_OFFSET = 16;
 module.exports = class CityElement {
    constructor(city) {
       this.id = city.id;
+      this.name = city.name;
       this.civ = city.civ;
       this.pop = city.pop;
       this.row = city.row;
@@ -23,7 +24,7 @@ module.exports = class CityElement {
       icon.src = `./images/cities/stone2.gif`;
 
       const title = document.createElement('div');
-      title.innerHTML = 'Paris';
+      title.innerHTML = this.name;
       title.classList.add('city-icon');
       title.style.color = '#FFF';
 

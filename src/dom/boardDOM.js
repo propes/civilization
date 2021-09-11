@@ -1,6 +1,7 @@
 const TileElement = require('../dom/tileElement');
 const CityElement = require('../dom/cityElement');
 const UnitElement = require('../dom/unitElement');
+const NameCityDialog = require('../components/name-city-dialog');
 
 module.exports = class BoardDOM {
    units = {};
@@ -20,7 +21,8 @@ module.exports = class BoardDOM {
       this.unitsElem.id = 'units';
       this.boardElem.appendChild(this.unitsElem);
 
-      events.subscribe(this);
+      this.events = events;
+      this.events.subscribe(this);
    }
 
    createTileElement(tile) {
@@ -50,8 +52,23 @@ module.exports = class BoardDOM {
       delete this.units[id];
    }
 
+   showCityNameDialog() {
+      const dialog = new NameCityDialog();
+      dialog.onAccept(() => {
+         this.events.publish({
+            name: 'buildCityAccepted',
+            data: {
+               cityName: dialog.getCityName()
+            }
+         });
+      });
+   }
+
    onEvent(e) {
       switch(e.name) {
+         case 'buildCityRequested':
+            this.showCityNameDialog(e.city);
+            break;
          case 'cityBuilt':
             this.createCityElement(e.city);
             break;

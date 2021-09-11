@@ -6,6 +6,7 @@ module.exports = function EventBus() {
    };
 
    this.publish = function(e) {
+      console.info('Event published:', e.name);
       subscribers.forEach(sub => sub.onEvent(e));
    };
 };

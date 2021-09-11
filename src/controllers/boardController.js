@@ -7,6 +7,8 @@ module.exports = class BoardController {
       const events = new EventBus();
       this.board = new Board(state, events);
       this.dom = new BoardDOM(boardElem, events);
+
+      events.subscribe(this);
    }
 
    onKeyDown(key) {
@@ -36,7 +38,15 @@ module.exports = class BoardController {
             this.board.moveSelectedUnitDownAndRight();
             break;
          case 'b':
-            this.board.buildCity();
+            this.board.requestBuildCity();
+            break;
+      }
+   }
+
+   onEvent(e) {
+      switch(e.name) {
+         case 'buildCityAccepted':
+            this.board.buildCity(e.data.cityName);
             break;
       }
    }

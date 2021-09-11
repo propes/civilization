@@ -4,11 +4,13 @@
    <meta charset="UTF-8">
    <title>Civilization II</title>
    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-   <link rel="stylesheet" href="styles.css">
+   <link rel="stylesheet" href="dist/bundle.css">
    <script src="dist/index.js"></script>
 </head>
 <body>
-   <div class="mdc-dialog">
+   <div id="board" class="board"></div>
+
+   <div id="nameCityDialog" class="mdc-dialog">
       <div class="mdc-dialog__container">
          <div class="mdc-dialog__surface"
             role="alertdialog"
@@ -16,23 +18,21 @@
             aria-labelledby="my-dialog-title"
             aria-describedby="my-dialog-content">
             <div class="mdc-dialog__content" id="my-dialog-content">
-            Discard draft?
+               <input id="nameCityDialog_cityName" type="text" />
             </div>
             <div class="mdc-dialog__actions">
-            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel">
-               <div class="mdc-button__ripple"></div>
-               <span class="mdc-button__label">Cancel</span>
-            </button>
-            <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="discard">
-               <div class="mdc-button__ripple"></div>
-               <span class="mdc-button__label">Discard</span>
-            </button>
+               <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="cancel">
+                  <div class="mdc-button__ripple"></div>
+                  <span class="mdc-button__label">Cancel</span>
+               </button>
+               <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="ok">
+                  <div class="mdc-button__ripple"></div>
+                  <span class="mdc-button__label">OK</span>
+               </button>
             </div>
          </div>
       </div>
       <div class="mdc-dialog__scrim"></div>
    </div>
-
-   <div id="board" class="board"></div>
 </body>
 </html>

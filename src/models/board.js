@@ -42,7 +42,7 @@ module.exports = function Board(state, events) {
          unit.col--;
       }
       this.publishUnitMovedEvent(unit);
-   }
+   };
 
    this.moveSelectedUnitUpAndRight = function() {
       const unit = this.getSelectedUnit();
@@ -51,7 +51,7 @@ module.exports = function Board(state, events) {
          unit.col++;
       }
       this.publishUnitMovedEvent(unit);
-   }
+   };
 
    this.moveSelectedUnitDownAndLeft = function() {
       const unit = this.getSelectedUnit();
@@ -60,7 +60,7 @@ module.exports = function Board(state, events) {
          unit.col--;
       }
       this.publishUnitMovedEvent(unit);
-   }
+   };
 
    this.moveSelectedUnitDownAndRight = function() {
       const unit = this.getSelectedUnit();
@@ -69,14 +69,24 @@ module.exports = function Board(state, events) {
          unit.col++;
       }
       this.publishUnitMovedEvent(unit);
-   }
+   };
 
-   this.buildCity = function() {
+   this.requestBuildCity = function() {
+      const unit = this.getSelectedUnit();
+      if (!unit || unit.type !== "settler") return;
+
+      events.publish({
+         name: 'buildCityRequested'
+      });
+   };
+
+   this.buildCity = function(cityName) {
       const unit = this.getSelectedUnit();
       if (!unit || unit.type !== "settler") return;
 
       const city = {
-         id: 'fr-city-1',
+         id: `fr-city-${cityName}`,
+         name: cityName,
          civ: unit.civ,
          pop: 3,
          row: unit.row,
@@ -86,16 +96,16 @@ module.exports = function Board(state, events) {
       unit.hasBuiltCity = true;
 
       this.publishUnitKilledEvent(unit);
-      this.publishCityBuiltEvent(city);
       this.clearSelectedUnit();
-   }
+      this.publishCityBuiltEvent(city);
+   };
 
    this.publishCityBuiltEvent = function(city) {
       events.publish({
          name: 'cityBuilt',
          city
       });
-   }
+   };
 
    this.publishUnitMovedEvent = function(unit) {
       events.publish({
