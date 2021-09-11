@@ -1,0 +1,32 @@
+body {
+   margin: 0px;
+   padding: 5px;
+   background-color: #000;
+}
+
+.board {
+   position: relative;
+}
+
+.city-icon {
+   position: relative;
+   text-align: center;
+   top: -10px;
+   left: 0px;
+   text-shadow: 1px 1px #000;
+}
+
+.pop-badge {
+   position: relative;
+   display: inline-block;
+   background-color: #fff;
+   border: 1px inset #555;
+   text-align: center;
+   top: -44px;
+   left: 8px;
+   height: 8px;
+   width: 6px;
+   font-family: sans-serif;
+   font-size: 6pt;
+   font-weight: 900;
+}
