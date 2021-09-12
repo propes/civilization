@@ -1,86 +1,91 @@
-module.exports = function Board(state, events) {
-   this.getTiles = () => state.tiles;
+module.exports = class Board {
+   constructor(state, events) {
+      this.state = state;
+      this.events = events;
+   }
 
-   this.getUnits = () => state.units;
+   getTiles = () => this.state.tiles;
 
-   this.getSelectedUnit = () => state.units[state.selectedUnitId];
+   getUnits = () => this.state.units;
 
-   this.clearSelectedUnit = () => state.selectedUnitId = null;
+   getSelectedUnit = () => this.state.units[this.state.selectedUnitId];
 
-   this.moveSelectedUnitUp = function() {
+   clearSelectedUnit = () => this.state.selectedUnitId = null;
+
+   moveSelectedUnitUp()  {
       const unit = this.getSelectedUnit();
       if (unit.row > 1)
          unit.row -= 2;
       this.publishUnitMovedEvent(unit);
-   };
+   }
 
-   this.moveSelectedUnitDown = function() {
+   moveSelectedUnitDown() {
       const unit = this.getSelectedUnit();
-      if (unit.row < state.rowCount - 2)
+      if (unit.row < this.state.rowCount - 2)
          unit.row += 2;
       this.publishUnitMovedEvent(unit);
-   };
+   }
 
-   this.moveSelectedUnitLeft = function() {
+   moveSelectedUnitLeft() {
       const unit = this.getSelectedUnit();
       if (unit.col > 1)
          unit.col -= 2;
       this.publishUnitMovedEvent(unit);
-   };
+   }
 
-   this.moveSelectedUnitRight = function() {
+   moveSelectedUnitRight() {
       const unit = this.getSelectedUnit();
-      if (unit.col < state.colCount - 2)
+      if (unit.col < this.state.colCount - 2)
          unit.col += 2;
       this.publishUnitMovedEvent(unit);
-   };
+   }
 
-   this.moveSelectedUnitUpAndLeft = function() {
+   moveSelectedUnitUpAndLeft() {
       const unit = this.getSelectedUnit();
       if (unit.row > 0 && unit.col > 0) {
          unit.row--;
          unit.col--;
       }
       this.publishUnitMovedEvent(unit);
-   };
+   }
 
-   this.moveSelectedUnitUpAndRight = function() {
+   moveSelectedUnitUpAndRight() {
       const unit = this.getSelectedUnit();
-      if (unit.row > 0 && unit.col < state.colCount - 1) {
+      if (unit.row > 0 && unit.col < this.state.colCount - 1) {
          unit.row--;
          unit.col++;
       }
       this.publishUnitMovedEvent(unit);
-   };
+   }
 
-   this.moveSelectedUnitDownAndLeft = function() {
+   moveSelectedUnitDownAndLeft() {
       const unit = this.getSelectedUnit();
-      if (unit.row < state.rowCount - 1 && unit.col > 0) {
+      if (unit.row < this.state.rowCount - 1 && unit.col > 0) {
          unit.row++;
          unit.col--;
       }
       this.publishUnitMovedEvent(unit);
-   };
+   }
 
-   this.moveSelectedUnitDownAndRight = function() {
+   moveSelectedUnitDownAndRight() {
       const unit = this.getSelectedUnit();
-      if (unit.row < state.rowCount - 1 && unit.col < state.colCount - 1) {
+      if (unit.row < this.state.rowCount - 1 && unit.col < this.state.colCount - 1) {
          unit.row++;
          unit.col++;
       }
       this.publishUnitMovedEvent(unit);
-   };
+   }
 
-   this.requestBuildCity = function() {
+   requestBuildCity() {
       const unit = this.getSelectedUnit();
       if (!unit || unit.type !== "settler") return;
 
-      events.publish({
+      this.events.publish({
          name: 'buildCityRequested'
       });
-   };
+   }
 
-   this.buildCity = function(cityName) {
+   buildCity(cityName) {
       const unit = this.getSelectedUnit();
       if (!unit || unit.type !== "settler") return;
 
@@ -92,35 +97,35 @@ module.exports = function Board(state, events) {
          row: unit.row,
          col: unit.col
       };
-      state.cities[city.id] = city;
+      this.state.cities[city.id] = city;
       unit.hasBuiltCity = true;
 
       this.publishUnitKilledEvent(unit);
       this.clearSelectedUnit();
       this.publishCityBuiltEvent(city);
-   };
+   }
 
-   this.publishCityBuiltEvent = function(city) {
-      events.publish({
+   publishCityBuiltEvent(city) {
+      this.events.publish({
          name: 'cityBuilt',
          city
       });
-   };
+   }
 
-   this.publishUnitMovedEvent = function(unit) {
-      events.publish({
+   publishUnitMovedEvent(unit) {
+      this.events.publish({
          name: 'unitMoved',
          data: {
             id: unit.id,
             newLocation: { row: unit.row, col: unit.col }
          }
       });
-   };
+   }
 
-   this.publishUnitKilledEvent = function(unit) {
-      events.publish({
+   publishUnitKilledEvent(unit) {
+      this.events.publish({
          name: 'unitKilled',
          unitId: unit.id
       });
-   };
+   }
 }
