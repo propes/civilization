@@ -1,7 +1,7 @@
 const TileElement = require('../dom/tileElement');
 const CityElement = require('../dom/cityElement');
 const UnitElement = require('../dom/unitElement');
-const NameCityDialog = require('../components/name-city-dialog');
+const NameCityDialog = require('../components/nameCityDialog');
 
 module.exports = class BoardDOM {
    units = {};
