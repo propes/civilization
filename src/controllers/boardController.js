@@ -7,11 +7,14 @@ module.exports = class BoardController {
       const events = new EventBus();
       this.board = new Board(state, events);
       this.dom = new BoardDOM(boardElem, events);
+      this.ignoreKeyDown = false;
 
       events.subscribe(this);
    }
 
    onKeyDown(key) {
+      if (this.ignoreKeyDown) return;
+
       switch (key) {
          case 'ArrowUp':
             this.board.moveSelectedUnitUp();
@@ -45,8 +48,17 @@ module.exports = class BoardController {
 
    onEvent(e) {
       switch(e.name) {
+         case 'buildCityRequested':
+            this.ignoreKeyDown = true;
+            break;
+
+         case 'buildCityCancelled':
+            this.ignoreKeyDown = false;
+            break;
+            
          case 'buildCityAccepted':
             this.board.buildCity(e.data.cityName);
+            this.ignoreKeyDown = false;
             break;
       }
    }

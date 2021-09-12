@@ -54,12 +54,19 @@ module.exports = class BoardDOM {
 
    showCityNameDialog() {
       const dialog = new NameCityDialog();
+
       dialog.onAccept(() => {
          this.events.publish({
             name: 'buildCityAccepted',
             data: {
                cityName: dialog.getCityName()
             }
+         });
+      });
+
+      dialog.onCancel(() => {
+         this.events.publish({
+            name: 'buildCityCancelled',
          });
       });
    }

@@ -4,11 +4,18 @@ module.exports = class NameCityDialog {
    constructor() {
       this.dialog = new MDCDialog(document.getElementById('nameCityDialog'));
       this.dialog.listen('MDCDialog:closing', (e) => {
-         if (e.detail.action === "ok") {
-            console.log(this.acceptAction);
-            if (this.acceptAction) {
-               this.acceptAction();
-            }
+         switch (e.detail.action) {
+            case "accept":
+               if (this.acceptAction) {
+                  this.acceptAction();
+               }
+               break;
+            case "cancel":
+            case "close":
+               if (this.cancelAction) {
+                  this.cancelAction();
+               }
+               break;
          }
       });
 
@@ -29,5 +36,9 @@ module.exports = class NameCityDialog {
 
    onAccept(action) {
       this.acceptAction = action;
+   }
+
+   onCancel(action) {
+      this.cancelAction = action;
    }
 }
