@@ -8,72 +8,81 @@ module.exports = class Board {
 
    getUnits = () => this.state.units;
 
-   getSelectedUnit = () => this.state.units[this.state.selectedUnitId];
+   getSelectedUnit = () => {
+      if (!this.state.selectedUnitId) {
+         return null;
+      }
+      return this.state.units[this.state.selectedUnitId];
+   }
 
    clearSelectedUnit = () => this.state.selectedUnitId = null;
 
    moveSelectedUnitUp()  {
       const unit = this.getSelectedUnit();
-      if (unit.row > 1)
+      if (unit && unit.row > 1) {
          unit.row -= 2;
-      this.publishUnitMovedEvent(unit);
+         this.publishUnitMovedEvent(unit);
+      }
    }
 
    moveSelectedUnitDown() {
       const unit = this.getSelectedUnit();
-      if (unit.row < this.state.rowCount - 2)
+      if (unit && unit.row < this.state.rowCount - 2) {
          unit.row += 2;
-      this.publishUnitMovedEvent(unit);
+         this.publishUnitMovedEvent(unit);
+      }
    }
 
    moveSelectedUnitLeft() {
       const unit = this.getSelectedUnit();
-      if (unit.col > 1)
+      if (unit && unit.col > 1) {
          unit.col -= 2;
-      this.publishUnitMovedEvent(unit);
+         this.publishUnitMovedEvent(unit);
+      }
    }
 
    moveSelectedUnitRight() {
       const unit = this.getSelectedUnit();
-      if (unit.col < this.state.colCount - 2)
+      if (unit && unit.col < this.state.colCount - 2) {
          unit.col += 2;
-      this.publishUnitMovedEvent(unit);
+         this.publishUnitMovedEvent(unit);
+      }
    }
 
    moveSelectedUnitUpAndLeft() {
       const unit = this.getSelectedUnit();
-      if (unit.row > 0 && unit.col > 0) {
+      if (unit && unit.row > 0 && unit.col > 0) {
          unit.row--;
          unit.col--;
+         this.publishUnitMovedEvent(unit);
       }
-      this.publishUnitMovedEvent(unit);
    }
 
    moveSelectedUnitUpAndRight() {
       const unit = this.getSelectedUnit();
-      if (unit.row > 0 && unit.col < this.state.colCount - 1) {
+      if (unit && unit.row > 0 && unit.col < this.state.colCount - 1) {
          unit.row--;
          unit.col++;
+         this.publishUnitMovedEvent(unit);
       }
-      this.publishUnitMovedEvent(unit);
    }
 
    moveSelectedUnitDownAndLeft() {
       const unit = this.getSelectedUnit();
-      if (unit.row < this.state.rowCount - 1 && unit.col > 0) {
+      if (unit && unit.row < this.state.rowCount - 1 && unit.col > 0) {
          unit.row++;
          unit.col--;
+         this.publishUnitMovedEvent(unit);
       }
-      this.publishUnitMovedEvent(unit);
    }
 
    moveSelectedUnitDownAndRight() {
       const unit = this.getSelectedUnit();
-      if (unit.row < this.state.rowCount - 1 && unit.col < this.state.colCount - 1) {
+      if (unit && unit.row < this.state.rowCount - 1 && unit.col < this.state.colCount - 1) {
          unit.row++;
          unit.col++;
+         this.publishUnitMovedEvent(unit);
       }
-      this.publishUnitMovedEvent(unit);
    }
 
    requestBuildCity() {
