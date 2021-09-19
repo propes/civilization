@@ -4,12 +4,12 @@ const BoardDOM = require('../dom/boardDOM');
 
 module.exports = class BoardController {
    constructor(boardElem, state) {
-      const events = new EventBus();
-      this.board = new Board(state, events);
-      this.dom = new BoardDOM(boardElem, events);
+      this.events = new EventBus();
+      this.board = new Board(state, this.events);
+      this.dom = new BoardDOM(boardElem, this.events);
       this.ignoreKeyDown = false;
 
-      events.subscribe(this);
+      this.events.subscribe(this);
    }
 
    onKeyDown(key) {

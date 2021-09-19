@@ -1,12 +1,14 @@
-module.exports = function EventBus() {
-   const subscribers = [];
+module.exports = class EventBus {
+   constructor() {
+      this.subscribers = [];
+   }
 
-   this.subscribe = function(sub) {
-      subscribers.push(sub);
-   };
+   subscribe(sub) {
+      this.subscribers.push(sub);
+   }
 
-   this.publish = function(e) {
+   publish(e) {
       console.info('Event published:', e.name);
-      subscribers.forEach(sub => sub.onEvent(e));
+      this.subscribers.forEach(sub => sub.onEvent(e));
    };
 };

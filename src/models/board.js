@@ -99,7 +99,7 @@ module.exports = class Board {
       if (!unit || unit.type !== "settler") return;
 
       const city = {
-         id: `fr-city-${cityName}`,
+         id: `fr-city-${cityName.toLowerCase()}`,
          name: cityName,
          civ: unit.civ,
          pop: 3,
