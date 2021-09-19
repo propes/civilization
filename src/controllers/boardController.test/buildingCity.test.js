@@ -1,5 +1,6 @@
 const { JSDOM } = require('jsdom');
 const BoardController = require('../boardController');
+const Settler = require('../../models/settler');
 
 describe('when "buildCityAccepted" event is published', () => {
    let boardState;
@@ -14,13 +15,7 @@ describe('when "buildCityAccepted" event is published', () => {
             tiles: [],
             cities: {},
             units: {
-               ['unitId']: {
-                  id: 'unitId',
-                  type: 'settler',
-                  civ: 'french',
-                  row: 2,
-                  col: 2
-               }
+               ['unitId']: new Settler('unitId', 'french', 2, 2)
             },
             selectedUnitId: 'unitId'
          };

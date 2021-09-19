@@ -4,9 +4,17 @@ module.exports = class Board {
       this.events = events;
    }
 
-   getTiles = () => this.state.tiles;
+   copy() {
+      return new Board(this.state, this.events);
+   }
 
-   getUnits = () => this.state.units;
+   get tiles() {
+      return this.state.tiles;
+   }
+
+   get units() {
+      return this.state.units;
+   }
 
    getSelectedUnit = () => {
       if (!this.state.selectedUnitId) {
@@ -15,13 +23,29 @@ module.exports = class Board {
       return this.state.units[this.state.selectedUnitId];
    }
 
-   clearSelectedUnit = () => this.state.selectedUnitId = null;
+   get haveAllUnitsMoved() {
+      return !Object
+         .keys(this.state.units)
+         .map(key => this.state.units[key])
+         .some(unit => unit.canMove);
+   }
+
+   clearSelectedUnit() {
+      this.state.selectedUnitId = null;
+   }
+
+   resetUnitMoves() {
+      for (var unitId in this.state.units) {
+         this.state.units[unitId].resetMoves();
+      }
+   }
 
    moveSelectedUnitUp()  {
       const unit = this.getSelectedUnit();
       if (unit && unit.row > 1 && unit.canMove) {
          unit.moveUp();
          this.publishUnitMovedEvent(unit);
+         this.checkTurnFinished();
       }
    }
 
@@ -30,6 +54,7 @@ module.exports = class Board {
       if (unit && unit.row < this.state.rowCount - 2 && unit.canMove) {
          unit.moveDown();
          this.publishUnitMovedEvent(unit);
+         this.checkTurnFinished();
       }
    }
 
@@ -38,6 +63,7 @@ module.exports = class Board {
       if (unit && unit.col > 1 && unit.canMove) {
          unit.moveLeft();
          this.publishUnitMovedEvent(unit);
+         this.checkTurnFinished();
       }
    }
 
@@ -46,6 +72,7 @@ module.exports = class Board {
       if (unit && unit.col < this.state.colCount - 2 && unit.canMove) {
          unit.moveRight();
          this.publishUnitMovedEvent(unit);
+         this.checkTurnFinished();
       }
    }
 
@@ -54,6 +81,7 @@ module.exports = class Board {
       if (unit && unit.row > 0 && unit.col > 0 && unit.canMove) {
          unit.moveUpAndLeft();
          this.publishUnitMovedEvent(unit);
+         this.checkTurnFinished();
       }
    }
 
@@ -62,6 +90,7 @@ module.exports = class Board {
       if (unit && unit.row > 0 && unit.col < this.state.colCount - 1 && unit.canMove) {
          unit.moveUpAndRight();
          this.publishUnitMovedEvent(unit);
+         this.checkTurnFinished();
       }
    }
 
@@ -70,6 +99,7 @@ module.exports = class Board {
       if (unit && unit.row < this.state.rowCount - 1 && unit.col > 0 && unit.canMove) {
          unit.moveDownAndLeft();
          this.publishUnitMovedEvent(unit);
+         this.checkTurnFinished();
       }
    }
 
@@ -78,16 +108,17 @@ module.exports = class Board {
       if (unit && unit.row < this.state.rowCount - 1 && unit.col < this.state.colCount - 1 && unit.canMove) {
          unit.moveDownAndRight();
          this.publishUnitMovedEvent(unit);
+         this.checkTurnFinished();
       }
    }
 
    requestBuildCity() {
       const unit = this.getSelectedUnit();
-      if (!unit || unit.type !== "settler") return;
-
-      this.events.publish({
-         name: 'buildCityRequested'
-      });
+      if (unit && unit.type === "settler" && unit.canMove) {
+         this.events.publish({
+            name: 'buildCityRequested'
+         });
+      }
    }
 
    buildCity(cityName) {
@@ -103,11 +134,20 @@ module.exports = class Board {
          col: unit.col
       };
       this.state.cities[city.id] = city;
-      unit.hasBuiltCity = true;
+      unit.buildCity();
 
-      this.publishUnitKilledEvent(unit);
       this.clearSelectedUnit();
+      this.publishUnitKilledEvent(unit);
       this.publishCityBuiltEvent(city);
+      this.checkTurnFinished();
+   }
+
+   checkTurnFinished() {
+      if (this.haveAllUnitsMoved) {
+         this.events.publish({
+            name: 'allUnitsMoved'
+         });
+      }
    }
 
    publishCityBuiltEvent(city) {

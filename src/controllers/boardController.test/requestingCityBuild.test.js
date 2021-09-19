@@ -1,6 +1,7 @@
 const { JSDOM } = require('jsdom');
 const BoardController = require('../boardController');
 const EventBus = require('../../events/eventBus');
+const Settler = require('../../models/settler');
 
 jest.mock('../../events/eventBus');
 
@@ -18,13 +19,7 @@ describe('when "b" is pressed', () => {
             tiles: [],
             cities: {},
             units: {
-               ['unitId']: {
-                  id: 'unitId',
-                  type: 'settler',
-                  civ: 'french',
-                  row: 2,
-                  col: 2
-               }
+               ['unitId']: new Settler('unitId', 'french', 2, 2)
             },
             selectedUnitId: 'unitId'
          };

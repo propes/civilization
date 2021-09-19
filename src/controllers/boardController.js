@@ -1,11 +1,11 @@
 const EventBus = require('../events/eventBus');
-const Board = require('../models/board');
+const Game = require('../models/game');
 const BoardDOM = require('../dom/boardDOM');
 
 module.exports = class BoardController {
    constructor(boardElem, state) {
       this.events = new EventBus();
-      this.board = new Board(state, this.events);
+      this.game = new Game(state, this.events);
       this.dom = new BoardDOM(boardElem, this.events);
       this.ignoreKeyDown = false;
 
@@ -17,31 +17,36 @@ module.exports = class BoardController {
 
       switch (key) {
          case 'ArrowUp':
-            this.board.moveSelectedUnitUp();
+            this.game.board.moveSelectedUnitUp();
             break;
          case 'ArrowDown':
-            this.board.moveSelectedUnitDown();
+            this.game.board.moveSelectedUnitDown();
             break;
          case 'ArrowLeft':
-            this.board.moveSelectedUnitLeft();
+            this.game.board.moveSelectedUnitLeft();
             break;
          case 'ArrowRight':
-            this.board.moveSelectedUnitRight();
+            this.game.board.moveSelectedUnitRight();
             break;
          case 'Home':
-            this.board.moveSelectedUnitUpAndLeft();
+            this.game.board.moveSelectedUnitUpAndLeft();
             break;
          case 'PageUp':
-            this.board.moveSelectedUnitUpAndRight();
+            this.game.board.moveSelectedUnitUpAndRight();
             break;
          case 'End':
-            this.board.moveSelectedUnitDownAndLeft();
+            this.game.board.moveSelectedUnitDownAndLeft();
             break;
          case 'PageDown':
-            this.board.moveSelectedUnitDownAndRight();
+            this.game.board.moveSelectedUnitDownAndRight();
             break;
          case 'b':
-            this.board.requestBuildCity();
+            this.game.board.requestBuildCity();
+            break;
+         case 'Enter':
+            if (this.game.canGoToNextTurn) {
+               this.game.nextTurn();
+            }
             break;
       }
    }
@@ -57,8 +62,12 @@ module.exports = class BoardController {
             break;
             
          case 'buildCityAccepted':
-            this.board.buildCity(e.data.cityName);
+            this.game.board.buildCity(e.data.cityName);
             this.ignoreKeyDown = false;
+            break;
+
+         case 'allUnitsMoved':
+            console.log("Press Enter to go to next turn...");
             break;
       }
    }
@@ -69,13 +78,13 @@ module.exports = class BoardController {
    }
 
    renderTiles() {
-      this.board.getTiles().forEach(tile => {
+      this.game.board.tiles.forEach(tile => {
          this.dom.createTileElement(tile);
       });
    }
 
    renderUnits() {
-      const units = this.board.getUnits();
+      const units = this.game.board.units;
       Object.values(units).forEach(unit => {
          this.dom.createUnitElement(unit);
       })
