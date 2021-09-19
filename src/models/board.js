@@ -19,68 +19,64 @@ module.exports = class Board {
 
    moveSelectedUnitUp()  {
       const unit = this.getSelectedUnit();
-      if (unit && unit.row > 1) {
-         unit.row -= 2;
+      if (unit && unit.row > 1 && unit.canMove) {
+         unit.moveUp();
          this.publishUnitMovedEvent(unit);
       }
    }
 
    moveSelectedUnitDown() {
       const unit = this.getSelectedUnit();
-      if (unit && unit.row < this.state.rowCount - 2) {
-         unit.row += 2;
+      if (unit && unit.row < this.state.rowCount - 2 && unit.canMove) {
+         unit.moveDown();
          this.publishUnitMovedEvent(unit);
       }
    }
 
    moveSelectedUnitLeft() {
       const unit = this.getSelectedUnit();
-      if (unit && unit.col > 1) {
-         unit.col -= 2;
+      if (unit && unit.col > 1 && unit.canMove) {
+         unit.moveLeft();
          this.publishUnitMovedEvent(unit);
       }
    }
 
    moveSelectedUnitRight() {
       const unit = this.getSelectedUnit();
-      if (unit && unit.col < this.state.colCount - 2) {
-         unit.col += 2;
+      if (unit && unit.col < this.state.colCount - 2 && unit.canMove) {
+         unit.moveRight();
          this.publishUnitMovedEvent(unit);
       }
    }
 
    moveSelectedUnitUpAndLeft() {
       const unit = this.getSelectedUnit();
-      if (unit && unit.row > 0 && unit.col > 0) {
-         unit.row--;
-         unit.col--;
+      if (unit && unit.row > 0 && unit.col > 0 && unit.canMove) {
+         unit.moveUpAndLeft();
          this.publishUnitMovedEvent(unit);
       }
    }
 
    moveSelectedUnitUpAndRight() {
       const unit = this.getSelectedUnit();
-      if (unit && unit.row > 0 && unit.col < this.state.colCount - 1) {
-         unit.row--;
-         unit.col++;
+      if (unit && unit.row > 0 && unit.col < this.state.colCount - 1 && unit.canMove) {
+         unit.moveUpAndRight();
          this.publishUnitMovedEvent(unit);
       }
    }
 
    moveSelectedUnitDownAndLeft() {
       const unit = this.getSelectedUnit();
-      if (unit && unit.row < this.state.rowCount - 1 && unit.col > 0) {
-         unit.row++;
-         unit.col--;
+      if (unit && unit.row < this.state.rowCount - 1 && unit.col > 0 && unit.canMove) {
+         unit.moveDownAndLeft();
          this.publishUnitMovedEvent(unit);
       }
    }
 
    moveSelectedUnitDownAndRight() {
       const unit = this.getSelectedUnit();
-      if (unit && unit.row < this.state.rowCount - 1 && unit.col < this.state.colCount - 1) {
-         unit.row++;
-         unit.col++;
+      if (unit && unit.row < this.state.rowCount - 1 && unit.col < this.state.colCount - 1 && unit.canMove) {
+         unit.moveDownAndRight();
          this.publishUnitMovedEvent(unit);
       }
    }

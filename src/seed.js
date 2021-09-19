@@ -1,3 +1,5 @@
+const Unit = require("./models/unit");
+
 function createBoardState() {
    const rowCount = 15;
    const colCount = 15;
@@ -8,13 +10,7 @@ function createBoardState() {
       tiles: tiles,
       cities: {},
       units: {
-         ['fr-settler-1']: {
-            id: 'fr-settler-1',
-            civ: 'french',
-            type: 'settler',
-            row: 4,
-            col: 4
-         }
+         ['fr-settler-1']: new Unit('fr-settler-1', 'settler', 'french', 4, 4)
       },
       selectedUnitId: 'fr-settler-1'
    };

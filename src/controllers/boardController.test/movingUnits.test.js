@@ -1,4 +1,5 @@
 const { JSDOM } = require('jsdom');
+const Unit = require('../../models/unit');
 
 const BoardController = require('../boardController');
 
@@ -43,11 +44,7 @@ describe('when moving selected unit', () => {
          colCount: 5,
          tiles: [],
          units: {
-            ['unitId']: {
-               id: 'unitId',
-               row: tc.before.row,
-               col: tc.before.col
-            }
+            ['unitId']: new Unit('unitId', null, null, tc.before.row, tc.before.col)
          },
          selectedUnitId: 'unitId'
       };
@@ -136,11 +133,7 @@ describe('when moving selected unit', () => {
          colCount: 5,
          tiles: [],
          units: {
-            ['unitId']: {
-               id: 'unitId',
-               row: tc.before.row,
-               col: tc.before.col
-            }
+            ['unitId']: new Unit('unitId', null, null, tc.before.row, tc.before.col)
          },
          selectedUnitId: 'unitId'
       };
