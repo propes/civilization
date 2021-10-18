@@ -44,8 +44,8 @@ module.exports = class BoardController {
             this.game.board.requestBuildCity();
             break;
          case 'Enter':
-            if (this.game.canGoToNextTurn) {
-               this.game.nextTurn();
+            if (this.game.haveAllUnitsMoved) {
+               this.game.completeTurn();
             }
             break;
       }

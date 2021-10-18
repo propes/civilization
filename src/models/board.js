@@ -1,22 +1,28 @@
+const City = require('./city');
+
 module.exports = class Board {
    constructor(state, events) {
       this.state = state;
       this.events = events;
    }
 
-   copy() {
-      return new Board(this.state, this.events);
-   }
-
    get tiles() {
       return this.state.tiles;
+   }
+
+   get cities() {
+      return this.state.cities;
    }
 
    get units() {
       return this.state.units;
    }
 
-   getSelectedUnit = () => {
+   get activeUnits() {
+      return this.state.units.filter(u => u.isActive);
+   }
+
+   get selectedUnit() {
       if (!this.state.selectedUnitId) {
          return null;
       }
@@ -27,7 +33,11 @@ module.exports = class Board {
       return !Object
          .keys(this.state.units)
          .map(key => this.state.units[key])
-         .some(unit => unit.canMove);
+         .some(unit => unit.isActive && unit.canMove);
+   }
+
+   copy() {
+      return new Board(this.state, this.events);
    }
 
    clearSelectedUnit() {
@@ -41,7 +51,7 @@ module.exports = class Board {
    }
 
    moveSelectedUnitUp()  {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.row > 1 && unit.canMove) {
          unit.moveUp();
          this.publishUnitMovedEvent(unit);
@@ -50,7 +60,7 @@ module.exports = class Board {
    }
 
    moveSelectedUnitDown() {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.row < this.state.rowCount - 2 && unit.canMove) {
          unit.moveDown();
          this.publishUnitMovedEvent(unit);
@@ -59,7 +69,7 @@ module.exports = class Board {
    }
 
    moveSelectedUnitLeft() {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.col > 1 && unit.canMove) {
          unit.moveLeft();
          this.publishUnitMovedEvent(unit);
@@ -68,7 +78,7 @@ module.exports = class Board {
    }
 
    moveSelectedUnitRight() {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.col < this.state.colCount - 2 && unit.canMove) {
          unit.moveRight();
          this.publishUnitMovedEvent(unit);
@@ -77,7 +87,7 @@ module.exports = class Board {
    }
 
    moveSelectedUnitUpAndLeft() {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.row > 0 && unit.col > 0 && unit.canMove) {
          unit.moveUpAndLeft();
          this.publishUnitMovedEvent(unit);
@@ -86,7 +96,7 @@ module.exports = class Board {
    }
 
    moveSelectedUnitUpAndRight() {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.row > 0 && unit.col < this.state.colCount - 1 && unit.canMove) {
          unit.moveUpAndRight();
          this.publishUnitMovedEvent(unit);
@@ -95,7 +105,7 @@ module.exports = class Board {
    }
 
    moveSelectedUnitDownAndLeft() {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.row < this.state.rowCount - 1 && unit.col > 0 && unit.canMove) {
          unit.moveDownAndLeft();
          this.publishUnitMovedEvent(unit);
@@ -104,7 +114,7 @@ module.exports = class Board {
    }
 
    moveSelectedUnitDownAndRight() {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.row < this.state.rowCount - 1 && unit.col < this.state.colCount - 1 && unit.canMove) {
          unit.moveDownAndRight();
          this.publishUnitMovedEvent(unit);
@@ -113,7 +123,7 @@ module.exports = class Board {
    }
 
    requestBuildCity() {
-      const unit = this.getSelectedUnit();
+      const unit = this.selectedUnit;
       if (unit && unit.type === "settler" && unit.canMove) {
          this.events.publish({
             name: 'buildCityRequested'
@@ -122,17 +132,10 @@ module.exports = class Board {
    }
 
    buildCity(cityName) {
-      const unit = this.getSelectedUnit();
-      if (!unit || unit.type !== "settler") return;
+      const unit = this.selectedUnit;
+      if (unit?.type !== "settler") return;
 
-      const city = {
-         id: `fr-city-${cityName.toLowerCase()}`,
-         name: cityName,
-         civ: unit.civ,
-         pop: 3,
-         row: unit.row,
-         col: unit.col
-      };
+      const city = new City(cityName, unit.civ, unit.row, unit.col);
       this.state.cities[city.id] = city;
       unit.buildCity();
 

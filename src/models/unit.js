@@ -7,6 +7,7 @@ module.exports = class Unit {
       this.col = col;
       this.moves = 1;
       this.movesRemaining = 1;
+      this.isActive = true;
    }
 
    get canMove() {

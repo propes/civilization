@@ -7,6 +7,7 @@ module.exports = class Settler extends Unit {
    }
 
    buildCity() {
+      this.isActive = false;
       this.hasBuiltCity = true;
       this.movesRemaining = 0;
    }

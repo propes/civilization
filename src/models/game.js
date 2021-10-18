@@ -19,14 +19,28 @@ module.exports = class Game {
       return this.currentTurn.board;
    }
 
-   get canGoToNextTurn() {
+   get haveAllUnitsMoved() {
       return this.currentTurn.board.haveAllUnitsMoved;
    }
 
-   nextTurn() {
-      if (!this.canGoToNextTurn) {
+   completeTurn() {
+      if (!this.haveAllUnitsMoved) {
          throw new Error('Cannot go to next turn. Not all units have moved.');
       }
+
+      this.doCityProduction();
+      this.moveToNextTurn();
+      this.board.checkTurnFinished();
+   }
+
+   doCityProduction() {
+      const cities = this.currentTurn.board.cities;
+      for (var cityId in cities) {
+         cities[cityId].build();
+      }
+   }
+
+   moveToNextTurn() {
       this.turnCount++;
       const boardCopy = this.board.copy();
       boardCopy.resetUnitMoves();
